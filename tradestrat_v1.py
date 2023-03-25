@@ -8,7 +8,7 @@ import joblib
 
 input_path = sys.argv[1]
 output_path = sys.argv[2]
-symbol_file = "./stock_list.csv"
+symbol_file = "/opt/demos/SampleStocks.csv"
 
 tick_data = open(input_path, 'r')
 order_time = open(output_path, 'w')
