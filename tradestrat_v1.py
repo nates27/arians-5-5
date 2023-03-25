@@ -17,7 +17,7 @@ idx_dict = dict(zip(symbol, list(range(len(symbol)))))
 
 # ---------- Initialization ----------
 
-model_file = 'model.pkl'
+model_file = 'nnc_lightgbm.pkl'
 model = joblib.load(model_file)
 target_vol = 100
 basic_vol = 2
@@ -104,7 +104,7 @@ while True:
                 # max(prc_temp[idx_25min:]) / min(prc_temp[idx_25min:]) - 1,
             ]).reshape(1, -1)
             y = model.predict(x)[0]
-            print(x)
+            #print(x)
 
             if y >= 0:
                 od_vol = basic_vol + unfinished_buy[idx]
@@ -150,3 +150,16 @@ while True:
 
 tick_data.close()
 order_time.close()
+
+# #
+#         if tm_ms - last_od_ms[idx] <= 60000:
+#             if cum_vol_buy[idx] < 2:
+#                 order = ('B', 2)
+#                 cum_vol_buy[idx] += 1
+#             elif cum_vol_sell[idx] < 2:
+#                 order = ('S', 2)
+#                 cum_vol_sell[idx] += 1
+#             else:
+#                 continue
+
+#         if tm_ms - last_od_ms[idx] > 60000 and tm_ms - last_od_ms[idx] < 300000:
