@@ -152,14 +152,14 @@ tick_data.close()
 order_time.close()
 
 # #
-#         if tm_ms - last_od_ms[idx] <= 60000:
-#             if cum_vol_buy[idx] < 2:
-#                 order = ('B', 2)
-#                 cum_vol_buy[idx] += 1
-#             elif cum_vol_sell[idx] < 2:
-#                 order = ('S', 2)
-#                 cum_vol_sell[idx] += 1
-#             else:
-#                 continue
+        if tm_ms - last_od_ms[idx] <= 60000:
+            if cum_vol_buy[idx] < 2:
+                order = ('B', 2)
+                cum_vol_buy[idx] += 1
+            elif cum_vol_sell[idx] < 2:
+                order = ('S', 2)
+                cum_vol_sell[idx] += 1
+            else:
+                continue
 
 #         if tm_ms - last_od_ms[idx] > 60000 and tm_ms - last_od_ms[idx] < 300000:
