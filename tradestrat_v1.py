@@ -19,7 +19,7 @@ idx_dict = dict(zip(symbol, list(range(len(symbol)))))
 
 model_file = 'nnc_lightgbm.pkl'
 model = joblib.load(model_file)
-target_vol = 100
+target_vol = 98
 basic_vol = 2
 cum_vol_buy = [0] * len(symbol)  # accumulate buying volume
 cum_vol_sell = [0] * len(symbol)  # accumulate selling volume
@@ -68,9 +68,24 @@ while True:
     sel_vol = int(row[52])
     hist_ms_prc[idx].append((tm_ms, prc, buy_vol, sel_vol))
     order = ('N', 0)
-
+    
     if tm_ms < 13800000:  # before 14:50:00
-        if tm_ms - last_od_ms[idx] < 300000:  # execute the order every 5 minutes
+        if tm_ms  - last_od_ms[idx] > 60000:
+            if cum_vol_buy[idx] < 2:
+                order = ('B', basic_vol)
+                cum_vol_buy[idx] += 1
+                last_od_ms[idx] = tm_ms
+                order_time.writelines(f'{sym},{order[0]},{nTick},{order[1]}\n')
+                order_time.flush()
+                continue
+            elif cum_vol_sell[idx] < 2:
+                order = ('S', basic_vol)
+                cum_vol_sell[idx] += 1
+                last_od_ms[idx] = tm_ms
+                order_time.writelines(f'{sym},{order[0]},{nTick},{order[1]}\n')
+                order_time.flush()
+                continue
+        if tm_ms - last_od_ms[idx] < 300000: # execute the order every 5 minutes
             order_time.writelines(f'{sym},N,{nTick},0\n')
             order_time.flush()
             continue
@@ -150,16 +165,3 @@ while True:
 
 tick_data.close()
 order_time.close()
-
-# #
-        if tm_ms - last_od_ms[idx] <= 60000:
-            if cum_vol_buy[idx] < 2:
-                order = ('B', 2)
-                cum_vol_buy[idx] += 1
-            elif cum_vol_sell[idx] < 2:
-                order = ('S', 2)
-                cum_vol_sell[idx] += 1
-            else:
-                continue
-
-#         if tm_ms - last_od_ms[idx] > 60000 and tm_ms - last_od_ms[idx] < 300000:
